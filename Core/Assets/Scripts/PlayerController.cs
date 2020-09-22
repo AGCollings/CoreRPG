@@ -12,12 +12,11 @@ public class PlayerController : MonoBehaviour
     private float moveSpeed;
     private float horizSens;
     private float vertSens;
-    private float vertCamMoveSpeed;
     private float zoomLevel;
 
 	private void Start()
 	{
-        // Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
         moveSpeed = 10.0f;
         horizSens = 5.0f;
         vertSens = 0.5f;
@@ -56,24 +55,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
+
     void cameraControls()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         // Turn the whole player object when moving the mouse horizontally
         transform.Rotate(0, Input.GetAxis("Mouse X") * horizSens, 0);
 
         // Constrain the camera's vertical position relative to the player
-        if (((playerCamera.transform.position.y - playerModel.transform.position.y) < (5) && Input.GetAxis("Mouse Y") > 0) || ((playerCamera.transform.position.y - playerModel.transform.position.y) > 2 && Input.GetAxis("Mouse Y") < 0))
+        if (((playerCamera.transform.position.y - playerModel.transform.position.y) < 5 && Input.GetAxis("Mouse Y") < 0) || ((playerCamera.transform.position.y - playerModel.transform.position.y) > 2 && Input.GetAxis("Mouse Y") > 0))
         {
             // Change the camera's position when moving the mouse vertically
-            playerCamera.transform.position = new Vector3(playerCamera.transform.position.x, playerCamera.transform.position.y + Input.GetAxis("Mouse Y") * vertSens, playerCamera.transform.position.z * zoomLevel);
+            playerCamera.transform.position = new Vector3(playerCamera.transform.position.x, playerCamera.transform.position.y - Input.GetAxis("Mouse Y") * vertSens, playerCamera.transform.position.z * zoomLevel);
         }
-        
-        // Allow the player to zoom in and out with the scroll wheel
-        if (zoomLevel > 1 && Input.mouseScrollDelta.y < 0 || zoomLevel < 5 && Input.mouseScrollDelta.y > 0)
-		{
-            zoomLevel -= Input.mouseScrollDelta.y;
-		}
 
         // Focus the camera on the playerModel
         playerCamera.transform.LookAt(playerModel.transform.position);
