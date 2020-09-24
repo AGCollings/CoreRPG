@@ -12,15 +12,13 @@ public class PlayerController : MonoBehaviour
     private float moveSpeed;
     private float horizSens;
     private float vertSens;
-    private float zoomLevel;
 
 	private void Start()
 	{
         Cursor.lockState = CursorLockMode.Locked;
         moveSpeed = 10.0f;
-        horizSens = 5.0f;
-        vertSens = 0.5f;
-        zoomLevel = 1.0f;
+        horizSens = 1.0f;
+        vertSens = 1.0f;
     }
 
     // Update is called once per frame
@@ -30,7 +28,7 @@ public class PlayerController : MonoBehaviour
         cameraControls();
         UIControls();
     }
-
+    
     // Movement and other player model specific controls
     void playerControls()
     {
@@ -58,19 +56,18 @@ public class PlayerController : MonoBehaviour
 
     void cameraControls()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         // Turn the whole player object when moving the mouse horizontally
         transform.Rotate(0, Input.GetAxis("Mouse X") * horizSens, 0);
 
-        // Constrain the camera's vertical position relative to the player
-        if (((playerCamera.transform.position.y - playerModel.transform.position.y) < 5 && Input.GetAxis("Mouse Y") < 0) || ((playerCamera.transform.position.y - playerModel.transform.position.y) > 2 && Input.GetAxis("Mouse Y") > 0))
-        {
-            // Change the camera's position when moving the mouse vertically
-            playerCamera.transform.position = new Vector3(playerCamera.transform.position.x, playerCamera.transform.position.y - Input.GetAxis("Mouse Y") * vertSens, playerCamera.transform.position.z * zoomLevel);
-        }
-
         // Focus the camera on the playerModel
         playerCamera.transform.LookAt(playerModel.transform.position);
+
+        // Constrain vertical camera movement to somewhere between directly above the player model and before the camera enters the ground
+        if (((playerCamera.transform.position.y > playerModel.transform.position.y + 1) && Input.GetAxis("Mouse Y") > 0) || ((Vector3.Angle(playerCamera.transform.forward, playerModel.transform.forward) < 75) && Input.GetAxis("Mouse Y") < 0))
+        {
+            // If the player moves the mouse vertically, rotate around the player around it's horizontal axis
+            playerCamera.transform.RotateAround(playerModel.transform.position, playerModel.transform.right, -Input.GetAxis("Mouse Y") * vertSens);
+        }
     }
 
     void UIControls()
