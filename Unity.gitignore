@@ -60,6 +60,9 @@ sysinfo.txt
 *.aab
 *.unitypackage
 
+#Unity Lock File
+*.lock
+
 # Crashlytics generated file
 crashlytics-build.properties
 
