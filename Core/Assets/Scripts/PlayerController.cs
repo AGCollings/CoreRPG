@@ -60,21 +60,17 @@ public class PlayerController : MonoBehaviour
 
     void cameraControls()
     {
-        // Turn the whole player object when moving the mouse horizontally
-        //transform.Rotate(0, Input.GetAxis("Mouse X") * horizSens, 0);
-
+        // Rotate the camera around the player (Although the player rotates with the camera, this allows the vertical and horizontal sensitivities to have the same impact)
         playerCamera.transform.RotateAround(playerModel.transform.position, playerModel.transform.up, Input.GetAxis("Mouse X") * vertSens);
 
         // Focus the camera on the playerModel
         playerCamera.transform.LookAt(playerModel.transform.position);
 
-        // If the player holds right click, lock the player's direction to forward
-        if (Input.GetMouseButton(1))
-		{
-            playerModel.transform.LookAt(2 * playerModel.transform.position - playerCamera.transform.position);
-            // Lock rotation to y axis only
-            playerModel.transform.rotation = new Quaternion(0, playerModel.transform.rotation.y, 0, playerModel.transform.rotation.w);
-		}
+        // Lock the player's direction to forward
+        playerModel.transform.LookAt(2 * playerModel.transform.position - playerCamera.transform.position);
+
+        // Lock rotation to y axis only
+        playerModel.transform.rotation = new Quaternion(0, playerModel.transform.rotation.y, 0, playerModel.transform.rotation.w);
 
         // Constrain vertical camera movement to between directly above the player model and before the camera enters the ground
         if (((playerCamera.transform.position.y > playerModel.transform.position.y + 1) && Input.GetAxis("Mouse Y") > 0) || ((Vector3.Angle(playerCamera.transform.forward, playerModel.transform.forward) < 75) && Input.GetAxis("Mouse Y") < 0))
