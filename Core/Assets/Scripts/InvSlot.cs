@@ -21,7 +21,10 @@ public class InvSlot : MonoBehaviour, IDropHandler
 	{
 		if (!item)
 		{
-			InvItemDrag.draggedItem.transform.SetParent(transform);
+			if (InvItemDrag.draggedItem != null)
+			{
+				InvItemDrag.draggedItem.transform.SetParent(transform);
+			}
 		}
 	}
 }

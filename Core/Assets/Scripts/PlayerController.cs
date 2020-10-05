@@ -10,14 +10,19 @@ public class PlayerController : MonoBehaviour
     private GameObject playerCamera;
 
     private float moveSpeed;
-    private float horizSens;
-    private float vertSens;
+    [Range(1.0f, 100.0f)]
+    public float horizSens;
+    [Range(1.0f, 100.0f)]
+    public float vertSens;
     private float camMinDistance;
     private float camMaxDistance;
 
 	private void Start()
 	{
-        Cursor.lockState = CursorLockMode.Locked;
+        playerCamera = GameObject.Find("PlayerCamera");
+        playerModel = GameObject.Find("PlayerModel");
+
+        Cursor.lockState = CursorLockMode.None;
         moveSpeed = 10.0f;
         horizSens = 1.0f;
         vertSens = 1.0f;
